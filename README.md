@@ -35,3 +35,41 @@ prompt="A photo of a dog."
 image=pipe(prompt=prompt, num_inference_steps=1, guidance_scale=0, timesteps=[399], height=1024, width=1024).images[0]
 image.save('output.png', 'PNG')
 ```
+
+## Use DisBack
+DisBack can be applied to the original score distillation process using the following pseudocode.
+
+```python
+Distill a one-step generator by DisBack.
+
+Input:
+    - Initial generator G^0_{stu}
+    - Pre-trained diffusion model s_θ
+
+Output:
+    - One-step generator G^*_{stu}
+
+Step 1: Degradation Recording
+---------------------------------
+1. Initialize s^\prime_θ ← s_θ
+2. While not converge:
+    a. Generate samples x_0 using G^0_{stu}
+    b. Compute noisy samples x_t = x_0 + σ_t * ε
+    c. Update model parameters θ by score matching.
+    d. Save intermediate checkpoints s^\prime_{θ_i}
+  Get the degradation path {s^\prime_{θ_i} | i = 0, ..., N}
+  Reverse the degradation path and get the convergence trajectory
+
+Step 2: Distribution Backtracking
+---------------------------------
+1. Initialize s_φ ← s^\prime_{θ_N}
+2. Distileld the intermediate checkpoints s^\prime_{θ_i} in the convergence trajectory sequentially
+   For i from N-1 to 0:
+    a. While not converge:
+        i. Update generator using VSD loss:
+            E_{t,ε} [ s_φ(x_t, t) - s′_θi(x_t, t) ] ∂x_t/∂η
+        ii. Update s_φ using score matching with generated samples:
+            ∂/∂φ [ E_{t,ε} || s_φ(x_t, t) - (x_0 - x_t) / σ_t^2 ||_2^2 ]
+
+3. Return the one-step generator G^*_{stu}
+```
