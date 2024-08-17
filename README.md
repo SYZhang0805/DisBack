@@ -40,36 +40,30 @@ image.save('output.png', 'PNG')
 DisBack can be applied to the original score distillation process using the following pseudocode.
 
 ```python
-Distill a one-step generator by DisBack.
+# Degradation
+s_theta = UNet() # Pre-trained Diffusion Model
+s_theta_prime, G_stu = s_theta.clone(), s_theta.clone()
+path_degradation = []
+for idx in range(num_iter_1st_stage):
+	x_0 = one_step_sample(G_stu)
+	x_t, t, epsilon = addnoise(x_0)
+	ckpt = train_score_model(s_theta_prime, x_t, t, epsilon)
+	if idx // interval_1st == 0:
+		path_degradation.append(ckpt)
+else:
+	path_degradation.append(ckpt)
 
-Input:
-    - Initial generator G^0_{stu}
-    - Pre-trained diffusion model s_θ
-
-Output:
-    - One-step generator G^*_{stu}
-
-Step 1: Degradation Recording
----------------------------------
-1. Initialize s^\prime_θ ← s_θ
-2. While not converge:
-    a. Generate samples x_0 using G^0_{stu}
-    b. Compute noisy samples x_t = x_0 + σ_t * ε
-    c. Update model parameters θ by score matching.
-    d. Save intermediate checkpoints s^\prime_{θ_i}
-  Get the degradation path {s^\prime_{θ_i} | i = 0, ..., N}
-  Reverse the degradation path and get the convergence trajectory
-
-Step 2: Distribution Backtracking
----------------------------------
-1. Initialize s_φ ← s^\prime_{θ_N}
-2. Distileld the intermediate checkpoints s^\prime_{θ_i} in the convergence trajectory sequentially
-   For i from N-1 to 0:
-    a. While not converge:
-        i. Update generator using VSD loss:
-            E_{t,ε} [ s_φ(x_t, t) - s′_θi(x_t, t) ] ∂x_t/∂η
-        ii. Update s_φ using score matching with generated samples:
-            ∂/∂φ [ E_{t,ε} || s_φ(x_t, t) - (x_0 - x_t) / σ_t^2 ||_2^2 ]
-
-3. Return the one-step generator G^*_{stu}
+# Backtracking
+path_backtracking = path_degradation[::-1]
+s_phi = s_theta_prime.clone()
+target = 1
+for idx in range(num_iter_2nd_stage):
+	s_target = path_backtracking[target]
+	x_0 = one_step_sample(G_stu)
+	x_t, t, epsilon = addnoise(x_0)
+	x_t.bachward( s_phi(x_t,t) - s_target(x_t,t) ) 
+	update(G_stu)
+	train_score_model(s_phi, x_t, t, epsilon)
+	if idx // interval_2nd == 0 and idx>1:
+		target += 1
 ```
