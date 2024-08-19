@@ -1,6 +1,6 @@
 # DisBack
 ## The official implementation of [Distribution Backtracking Distillation for One-step Diffusion Models](https://github.com/SYZhang0805/DisBack)
-Shengyuan Zhang, Ling Yang, Zejian Li*, Chenye Meng, An Zhao, Changyuan Yang, Guang Yang, Zhiyuan Yang, Lingyun Sun
+Shengyuan Zhang, Ling Yang, Zejian Li*, An Zhao, Chenye Meng, Changyuan Yang, Guang Yang, Zhiyuan Yang, Shuicheng Yan, Lingyun Sun
 
 ## Abastract
 Accelerating the sampling speed of diffusion models remains a significant challenge. Recent score distillation works try to distill a pre-trained multi-step diffusion model into a one-step generator. 
@@ -42,14 +42,14 @@ DisBack can be applied to the original score distillation process using the foll
 ```python
 # Degradation
 s_theta = UNet() # Pre-trained Diffusion Model
-s_theta_prime, G_stu = s_theta.clone(), s_theta.clone()
+s_theta_prime, G_stu = s_theta.clone(), s_theta.clone() # initialize generator and the beginning of the degradation path.
 path_degradation = []
 for idx in range(num_iter_1st_stage):
 	x_0 = one_step_sample(G_stu)
 	x_t, t, epsilon = addnoise(x_0)
-	ckpt = train_score_model(s_theta_prime, x_t, t, epsilon) # Training strategy depends on the type of pre-trained model used.
+	ckpt = train_score_model(s_theta_prime, x_t, t, epsilon) # Training strategy depends on the type of pre-trained model used. Eq.(7) in the paper.
 	if idx // interval_1st == 0:
-		path_degradation.append(ckpt)
+		path_degradation.append(ckpt) # Add intermediate checkpoint to the degradation path.
 else:
 	path_degradation.append(ckpt)
 
@@ -61,9 +61,9 @@ for idx in range(num_iter_2nd_stage):
 	s_target = path_backtracking[target]
 	x_0 = one_step_sample(G_stu) # One step generation.
 	x_t, t, epsilon = addnoise(x_0)
-	x_t.bachward( s_phi(x_t,t) - s_target(x_t,t) ) # VSD loss
-	update(G_stu)
-	train_score_model(s_phi, x_t, t, epsilon) 
-	if idx // interval_2nd == 0 and idx>1:
-		target += 1
+	x_t.bachward( s_phi(x_t,t) - s_target(x_t,t) ) # VSD loss. Eq.(8) in the paper.
+	update(G_stu) # Optimize G by gradient descent.
+	train_score_model(s_phi, x_t, t, epsilon) # Eq.(5) in the paper.
+	if idx // interval_2nd == 0 and idx>1: # Switch the target.
+		target += 1 
 ```
