@@ -12,8 +12,15 @@ Then _Distribution Backtracking_ trains a student generator to backtrack the int
 Extensive experiments show that the DisBack achieves faster and better convergence than the existing distillation method and accomplishes comparable generation performance.
 Notably, DisBack is easy to implement and can be generalized to existing distillation methods to boost performance.
 
-## One-step text-to-image generation
+## Examples
+### One-step text-to-image generation
 ![](https://github.com/SYZhang0805/DisBack/blob/main/samples/samples1.png)
+
+### One-step image conditional generation
+![](https://github.com/SYZhang0805/DisBack/blob/main/samples/imagenet.png)
+
+### One-step image unconditional generation
+![](https://github.com/SYZhang0805/DisBack/blob/main/samples/afhqv2.png)
 
 ## Inference
 ### Use the distilled SDXL model to do the one-step text-to-image generation
@@ -35,6 +42,13 @@ prompt="A photo of a dog."
 image=pipe(prompt=prompt, num_inference_steps=1, guidance_scale=0, timesteps=[399], height=1024, width=1024).images[0]
 image.save('output.png', 'PNG')
 ```
+
+## Pre-trained models
+The pre-trained EDM model on FFHQ64, AFHQv264, ImageNet64 are from [here](https://nvlabs-fi-cdn.nvidia.com/edm/pretrained/).
+
+The pre-trained DDIM model on CIFAR10 uses the checkpoint of [DDPM](https://github.com/VainF/Diff-Pruning/releases/download/v0.0.1/ddpm_ema_cifar10.zip) and the DDIM scheduler.
+
+The pre-trained Consistency Model: [LSUN bedroom](https://openaipublic.blob.core.windows.net/consistency/cd_bedroom256_lpips.pt), [LSUN cat](https://openaipublic.blob.core.windows.net/consistency/cd_cat256_lpips.pt), [ImageNet64](https://openaipublic.blob.core.windows.net/consistency/cd_imagenet64_lpips.pt).
 
 ## Use DisBack
 DisBack can be applied to the original score distillation process using the following pseudocode.
