@@ -47,23 +47,23 @@ path_degradation = []
 for idx in range(num_iter_1st_stage):
 	x_0 = one_step_sample(G_stu)
 	x_t, t, epsilon = addnoise(x_0)
-	ckpt = train_score_model(s_theta_prime, x_t, t, epsilon)
+	ckpt = train_score_model(s_theta_prime, x_t, t, epsilon) # Training strategy depends on the type of pre-trained model used.
 	if idx // interval_1st == 0:
 		path_degradation.append(ckpt)
 else:
 	path_degradation.append(ckpt)
 
-# Backtracking
-path_backtracking = path_degradation[::-1]
-s_phi = s_theta_prime.clone()
+# Backtracking 
+path_backtracking = path_degradation[::-1] # The reverse of the degradation path is viewed as the convergence trajectory.
+s_phi = path_backtracking[0].clone() # Use the first checkpoint of the convergence trajectory as the initial s_phi.
 target = 1
 for idx in range(num_iter_2nd_stage):
 	s_target = path_backtracking[target]
-	x_0 = one_step_sample(G_stu)
+	x_0 = one_step_sample(G_stu) # One step generation.
 	x_t, t, epsilon = addnoise(x_0)
-	x_t.bachward( s_phi(x_t,t) - s_target(x_t,t) ) 
+	x_t.bachward( s_phi(x_t,t) - s_target(x_t,t) ) # VSD loss
 	update(G_stu)
-	train_score_model(s_phi, x_t, t, epsilon)
+	train_score_model(s_phi, x_t, t, epsilon) 
 	if idx // interval_2nd == 0 and idx>1:
 		target += 1
 ```
