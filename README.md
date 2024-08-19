@@ -1,6 +1,6 @@
 # DisBack
 ## The official implementation of [Distribution Backtracking Distillation for One-step Diffusion Models](https://github.com/SYZhang0805/DisBack)
-Shengyuan Zhang, Ling Yang, Zejian Li*, An Zhao, Chenye Meng, Changyuan Yang, Guang Yang, Zhiyuan Yang, Shuicheng Yan, Lingyun Sun
+Shengyuan Zhang, Ling Yang, Zejian Li*, An Zhao, Chenye Meng, Changyuan Yang, Guang Yang, Zhiyuan Yang, Lingyun Sun
 
 ## Abastract
 Accelerating the sampling speed of diffusion models remains a significant challenge. Recent score distillation works try to distill a pre-trained multi-step diffusion model into a one-step generator. 
