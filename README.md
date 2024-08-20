@@ -139,4 +139,14 @@ for idx in range(num_iter_2nd_stage):
 		target += 1 
 ```
 
-## 
+## Credits
+
+DisBack is highly built on the following amazing open-source projects:
+
+[DMD2](https://tianweiy.github.io/dmd2/): Improved Distribution Matching Distillation for Fast Image Synthesis
+
+[Diff-Instruct](https://github.com/pkulwj1994/diff_instruct/tree/main): Diff-Instruct: A Universal Approach for Transferring Knowledge From Pre-trained Diffusion Models
+
+[ScoreGAN](https://github.com/White-Link/gpm): Unifying GANs and Score-Based Diffusion as Generative Particle Models
+
+Thanks to the maintainers of these projects for their contribution to this project!
