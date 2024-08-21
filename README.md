@@ -9,7 +9,7 @@ by *[Shengyuan Zhang](https://github.com/SYZhang0805)<sup>1</sup>, [Ling Yang](h
 </div>
 
 ## News
-- [2024.09] TODO: Training [LCM](https://github.com/luosiallen/ latent-consistency-model) and release the code.
+- [2024.09] TODO: Training [LCM](https://github.com/luosiallen/latent-consistency-model) and release the code.
 - [2024.08.29]: Release the training code of DisBack on Text-to-Image generation.
 
 ## Abstract
