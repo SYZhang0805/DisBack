@@ -139,6 +139,17 @@ for idx in range(num_iter_2nd_stage):
 		target += 1 
 ```
 
+## Citation
+If you find our paper useful or relevant to your research, please kindly cite our papers:
+```bib
+@article{zhang2024distributionbacktrackingbuildsfaster,
+    title={Distribution Backtracking Builds A Faster Convergence Trajectory for One-step Diffusion Distillation}, 
+    author={Shengyuan Zhang and Ling Yang and Zejian Li and An Zhao and Chenye Meng and Changyuan Yang and Guang Yang and Zhiyuan Yang and Lingyun Sun},
+    journal={arXiv 2408.15991},
+    year={2024}
+}
+```
+
 ## Credits
 
 DisBack is highly built on the following amazing open-source projects:
