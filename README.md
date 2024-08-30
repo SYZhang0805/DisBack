@@ -2,7 +2,7 @@
 	
 # 🔥DisBack🔥
 
-## [Distribution Backtracking Distillation for One-step Diffusion Models](https://github.com/SYZhang0805/DisBack)
+## [Distribution Backtracking Builds A Faster Convergence Trajectory for One-step Diffusion Distillation](https://github.com/SYZhang0805/DisBack)
 by *[Shengyuan Zhang](https://github.com/SYZhang0805)<sup>1</sup>, [Ling Yang](https://github.com/YangLing0818)<sup>2</sup>, [Zejian Li*](https://zejianli.github.io/)<sup>1</sup>, An Zhao<sup>1</sup>, Chenye Meng<sup>1</sup>, Changyuan Yang<sup>3</sup>, Guang Yang<sup>3</sup>, Zhiyuan Yang<sup>3</sup>, [Lingyun Sun](https://person.zju.edu.cn/sly)<sup>1</sup>*
 
 *<sup>1</sup>Zhejiang University <sup>2</sup>Peking University <sup>3</sup>Alibaba Group*
